@@ -1,56 +1,70 @@
 import flet as ft
 
 def main(page: ft.Page):
-    page.title = "Login"
+    page.title = "Inicio de sesion"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
-    titulo = ft.Text("Inicio de sesión", size=28)
+    def cambio_tab(e):
+        indice = e.control.selected_index
+        if indice == 0:
+            cuerpo_texto.value = "Seccion: Explorar"
+        elif indice == 1:
+            cuerpo_texto.value = "Seccion: Search"
+        elif indice == 2:
+            cuerpo_texto.value = "Seccion: Settings"
+        page.update()
+
+    cuerpo_texto = ft.Text("has ingresado correctamente", size=30, weight="bold")
 
     def realizar_login(e):
-        if user_input.value == "tester" and pass_input.value == "prueba":
+        if username.value == "tester" and password.value == "prueba":
             page.controls.clear()
 
-    username = ft.TextField(
-        label="Username",
-        width=300,
+            page.navigation_bar = ft.NavigationBar(
+                selected_index=0,
+                on_change=cambio_tab,
+                destinations=[
+                    ft.NavigationBarDestination(icon=ft.Icons.HOME, label="Explorar"),
+                    ft.NavigationBarDestination(icon=ft.Icons.SEARCH, label="Search"),
+                    ft.NavigationBarDestination(icon=ft.Icons.SETTINGS, label="Settings"),
+                ]
+            )
 
-    )
-    forgot_password = ft.Button(
+            page.add(
+                ft.Container(
+                    content=cuerpo_texto,
+                    alignment=ft.Alignment.CENTER,
+                    expand=True
+                )
+            )
+            page.update()
+        else:
+            password.error_text = "Credenciales incorrectas"
+            page.update()
+
+    username = ft.TextField(label="Usuario", width=300)
+    password = ft.TextField(label="Contraseña", password=True, can_reveal_password=True, width=300)
+
+    login = ft.ElevatedButton("Iniciar Sesion", on_click=realizar_login, width=300)
+
+    forgot_password = ft.TextButton(
         content=ft.Text("¿Olvidaste la contraseña?", italic=True),
         on_click=lambda _: print("Recuperar contraseña clickeado")
     )
-    password = ft.TextField(
-        label="Password",
-        password=True,
-        can_reveal_password=True,
-        width=300,
-    
-    )
 
-
-
-    login_button = ft.Button(
-        content=ft.Text("Login", size=16),
-        width=300,
-        height=45
-    )
-
-    card = ft.Container(
-        content=ft.Column(
-            controls=[
-                titulo,
+    page.add(
+        ft.Column(
+            [
+                ft.Text("Login de Usuario", size=25, weight="bold"),
                 username,
                 password,
-                login_button,
-                forgot_password,
+                login,
+                forgot_password
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        ),
-    
-
+            spacing=20
+        )
     )
-
-    page.add(card)
 
 ft.app(target=main)
