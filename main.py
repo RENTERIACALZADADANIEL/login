@@ -7,12 +7,19 @@ def main(page: ft.Page):
 
     titulo = ft.Text("Inicio de sesión", size=28)
 
+    def realizar_login(e):
+        if user_input.value == "tester" and pass_input.value == "prueba":
+            page.controls.clear()
+
     username = ft.TextField(
         label="Username",
         width=300,
 
     )
-
+    forgot_password = ft.Button(
+        content=ft.Text("¿Olvidaste la contraseña?", italic=True),
+        on_click=lambda _: print("Recuperar contraseña clickeado")
+    )
     password = ft.TextField(
         label="Password",
         password=True,
@@ -36,6 +43,7 @@ def main(page: ft.Page):
                 username,
                 password,
                 login_button,
+                forgot_password,
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         ),
